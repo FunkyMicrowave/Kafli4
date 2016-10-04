@@ -1,3 +1,8 @@
+<?php ob_start();
+try {
+ include './includes/title.php';
+ include './includes/random_image.php'; ?>
+
 <?php include './includes/title.php';
       include './includes/random_image.php'; ?>
 <!DOCTYPE HTML>
@@ -21,7 +26,12 @@
     <h1>DC Comics</h1>
 </header>
 <div id="wrapper">
-    <?php require './includes/menu.php'; ?>
+    <?php $file = './includes/menu.php';
+        if (file_exists($file) && is_readable($file)) {
+            require $file;
+        } else {
+            throw new Exception("$file can't be found");
+    }?>
     <main>
         <h2>DC Comics</h2>
 	  <p>DC Comics, Inc. is an American comic book publisher. It is the publishing unit of DC Entertainment, a subsidiary of Warner Bros., a division of Time Warner. DC Comics is one of the largest, oldest, and most successful companies operating in American comic books, and produces material featuring numerous well-known heroic characters, including Superman, Batman, Wonder Woman, Green Lantern, The Flash, Aquaman, Cyborg, Shazam, Martian Manhunter, Hawkman and Green Arrow.</p>
@@ -51,3 +61,9 @@
 </div>
 </body>
 </html>
+<?php } catch (Exception $e) {
+    ob_end_clean();
+ header('Location: http://localhost/phpsols/error.php');
+ } 
+ob_end_flush();
+?>
